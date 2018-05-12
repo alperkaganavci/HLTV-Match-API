@@ -1,67 +1,83 @@
-import urllib.request
+import datetime, requests
 from bs4 import BeautifulSoup
 
-print('_____ Welcome to HLTV Match BOT _____')
-print('__ Programmed by akagna __')
-print('Note: This is my first complex program.')
-print('This program can only pull today\'s live and upcoming matches and yesterday\'s matches.')
-print('* 1) Only live matches * 2) Only today\'s upcoming matches\n * 3) Only yesterday\'s matches\n * 4) All')
+class Matches:
+    def __init__(self):
+        self.matchlinks_um = []
+        self.matchlinks_lm = []
+        self.matchlinks_rts = []
+        self.teamNames = []
+        self.dates = []
+        self.events = []
+        self.clocks = []
 
-while True:
-    try:
-        pick = int(input('My choice is: '))
-        if (pick > 4 or pick <= 0):
-            print('Please enter a valid number.')
-        else:
+    def source (self, link):
+        self.r = requests.get(link)
+        self.sauce = self.r.content
+        self.soup = BeautifulSoup(self.sauce, 'lxml')
 
-    except:
-        print ('Please enter a valid number.')
+    def todaymatches(self):
+        print('\nTHESE ARE TODAY\'S UPCOMING MATCHES\n')
+        self.source('https://hltv.org/matches')
 
-def upcoming_matches ():
+        for self.links in self.soup.find(class_="standard-headline", text=(datetime.date.today())).find_parent().find_all(class_="upcoming-match"):
+            self.matchlinks_um.append('https://hltv.org' + self.links.get('href'))
+
+        for self.x in range(len(self.matchlinks_um)):
+            self.source(self.matchlinks_um[self.x])
+            self.time_class = self.soup.find('div', class_= 'time')['data-unix']
+            self.clock = datetime.datetime.fromtimestamp(int(self.time_class[:10])).time()
+            if str(self.clock) != '00:00:00':
+                for self.tn in self.soup.find_all('div', class_='teamName'):
+                    self.teamNames.append(self.tn.text)
+                self.date = self.soup.find('div', class_='date').text
+                self.dates.append(self.date)
+                self.eventname = self.soup.find('div', class_='event text-ellipsis').text
+                self.events.append(self.eventname)
+                self.clocks.append(self.clock)
+
+            else:
+                pass
+
+        self.teamA = self.teamNames[0::2]
+        self.teamB = self.teamNames[1::2]
+
+        for self.number in range(len(self.dates)):
+            print(self.teamA[self.number], 'vs', self.teamB[self.number], 'on', self.dates[self.number], 'at', self.clocks[self.number], self.events[self.number])
+
+    def livematches(self):
+        print('\nTHESE ARE LIVE MATCHES\n')
+        self.source('https://hltv.org/matches')
+
+        for self.links in self.soup.find('div', class_='live-matches').find_all('a'):
+            self.matchlinks_lm.append('https://hltv.org' + self.links.get('href'))
+
+        for self.x in range(len(self.matchlinks_lm)):
+            self.source(self.matchlinks_lm[self.x])
+            self.time_class = self.soup.find('div', class_='time')['data-unix']
+            self.clock = datetime.datetime.fromtimestamp(int(self.time_class[:10])).time()
+            for self.tn in self.soup.find_all('div', class_='teamName'):
+                self.teamNames.append(self.tn.text)
+            self.date = self.soup.find('div', class_='date').text
+            self.dates.append(self.date)
+            self.eventname = self.soup.find('div', class_='event text-ellipsis').text
+            self.events.append(self.eventname)
+            self.clocks.append(self.clock)
 
 
-headers = {}  # Headers gives information about you like your operation system, your browser etc.
-headers['User-Agent'] = 'Mozilla/5.0'  # I defined a user agent because HLTV perceive my connection as bot.c
-teamNames = []
-eventNames = []
-eventStatus = []
-eventDates = []
+        self.teamA = self.teamNames[0::2]
+        self.teamB = self.teamNames[1::2]
 
-a = 0
-b = 1
-# Getting the match pages' links.
-for links in soup.find_all('div', class_='upcoming-matches'):  # Looking for "upcoming-matches" class in source.
-    for links in soup.find_all('a'):  # Finding "a" tag under "upcoming-matches" class.
-        clearlink = links.get('href')  # Getting the value of variable.
-        if clearlink.startswith('/matches/'):  # Checking for if our link starts with "/matches/"
-            matchlinks.append('https://hltv.org' + clearlink)  # Adding into list.
-# Connecting to pages and getting what we want.
-while True:
+        for self.number in range(len(self.dates)):
+            print(self.teamA[self.number], 'vs', self.teamB[self.number], 'on', self.dates[self.number], 'at',
+                  self.clocks[self.number], self.events[self.number])
 
-    print(len(matchlinks), "matches found")
-    try:
-        matchNumber = int(input('How many matches you want to get? ')) # We control if input equals to a string.
-        print('Please be patient while matches are getting pulled. This can take a while.')
+Matches().livematches()
+Matches().todaymatches()
 
-        if matchNumber <= len(matchlinks) and not matchNumber <= 0:
-            for i in range(matchNumber):
-                matchpages = urllib.request.Request(matchlinks[i], headers=headers) # We are connecting to each link one by one with loop.
-                mpsession = urllib.request.urlopen(matchpages)
-                mpsauce = mpsession.read() # I got the source code in a different variable because i don't know if it'll cause a problem. I just don't want to be busy with it.
-                mpsoup = BeautifulSoup(mpsauce, 'lxml')
 
-                for names in mpsoup.find_all('div', class_='teamName'):
-                    teamNames.append(names.text)
-                for enames in mpsoup.find_all('div', class_='event text-ellipsis'):
-                    eventNames.append(enames.text)
-                for edates in mpsoup.find_all('div', class_='date'):
-                    eventDates.append(edates.text)
 
-        teamA = teamNames[0::2] # We split the list to 2 list because it gives an error when we don't. I'm too lazy to try to solve it, that was the easiest way.
-        teamB = teamNames[1::2]
-
-        for x in range (len(teamA)):
-            print(teamA[x], "vs", teamB[x], "at", eventDates[x], eventNames[x])
-    except:
-        print("Please enter a valid number !")
+# Linkleri çekeceğiz
+# Linklerin içinden saatlere bakacağız
+# Eğer saat 00:00 değilse bilgilerini
 
