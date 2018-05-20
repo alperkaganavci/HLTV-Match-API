@@ -3,7 +3,7 @@ This API will be updated as long as I live. :D
 # HLTV-Match API
 A bot which pulls upcoming, live and finished matches.(Results are only for today and yesterday) People can easily use who is interested with making bet websites etc.
 # JSON Support
-Real support for who thinks to use it. Anyone can pull match informations easily.
+Real support for those that will use it. Anyone can pull match informations easily.
 # An example of output
 ```{
   "matches": [
