@@ -13,7 +13,7 @@ class Matches:
         self.clocks = []
         self.bestof = []
         self.teamLogos = []
-        self.match = {}
+        self.match = {'matches': []}
 
     def source (self, link):
         self.r = requests.get(link)
@@ -21,7 +21,7 @@ class Matches:
         self.soup = BeautifulSoup(self.sauce, 'lxml')
 
     def matchdump (self):
-        self.match['matches'] = {
+        self.match['matches'].append({
                     'team1': str(self.teamA[self.number]),
                     'team2': str(self.teamB[self.number]),
                     'eventname': str(self.events[self.number]),
@@ -31,10 +31,8 @@ class Matches:
                     'team2logo': str(self.teamBlogo[self.number]),
                     'bo': str(self.bestof[self.number]),
                     'status': str(self.matchstatus[self.number])
-        }
-        self.dump = json.dumps(self.match, indent=2)
-        with open(os.getcwd() + '/match.txt', 'a') as self.f:
-            self.f.write(self.dump)
+        })
+
     def todaymatches(self):
         print('\nTHESE ARE TODAY\'S UPCOMING MATCHES\n')
         self.source('https://hltv.org/matches')
@@ -74,6 +72,11 @@ class Matches:
                 print(self.teamA[self.number], 'vs', self.teamB[self.number], 'on', self.dates[self.number], 'at',
                       self.clocks[self.number], self.events[self.number], self.bestof[self.number])
                 self.matchdump()
+
+            self.dump = json.dumps(self.match, indent=2)
+            with open(os.getcwd() + '/match.txt', 'a') as self.f:
+                self.f.write(self.dump)
+
             print('\nAll matches are dumped. You can pull the match infos from txt file.')
             print('Matches are dumped as dictionary.')
 
