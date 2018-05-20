@@ -20,6 +20,7 @@ Real support for those that will use it. Anyone can pull match informations easi
 } 
 ```
 # Requirements
+Python 3
 ```
 pip install lxml #I dont know if this has to be installed.
 pip install bs4
