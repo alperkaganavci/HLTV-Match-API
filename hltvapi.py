@@ -58,7 +58,7 @@ def upcomingmatches():
         matcheventnames.append(eventname)
         for lg in soup.find_all('img', class_='logo'):
             teamlogos.append(lg.get('src'))
-        maps = soup.find('div', class_='padding preformatted-text').text
+        maps = soup.find('div', class_='standard-box veto-box').find(class_='padding preformatted-text').text
         if maps.startswith('Best'):
             matchbestof.append(maps[:9])
         else:
@@ -88,7 +88,7 @@ def livematches():
             matcheventnames.append(eventname)
             for lg in soup.find_all('img', class_='logo'):
                 teamlogos.append(lg.get('src'))
-            maps = soup.find('div', class_='padding preformatted-text').text
+            maps = soup.find('div', class_='standard-box veto-box').find(class_='padding preformatted-text').text
             if maps.startswith('Best'):
                 matchbestof.append(maps[:9])
             else:
@@ -152,7 +152,7 @@ def results():
         matcheventnames.append(eventname)
         for lg in soup.find_all('img', class_='logo'):
             teamlogos.append(lg.get('src'))
-        maps = soup.find('div', class_='padding preformatted-text').text
+        maps = soup.find('div', class_='standard-box veto-box').find(class_='padding preformatted-text').text
         if maps.startswith('Best'):
             matchbestof.append(maps[:9])
         else:
