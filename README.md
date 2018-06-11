@@ -1,3 +1,5 @@
+# A NOTE
+I will add scores of results and live matches soon. (Wrote on 11.08.2018)
 # UPDATED
 This API will be updated as long as I live. :D
 # HLTV-Match API
@@ -20,9 +22,9 @@ Real support for those that will use it. Anyone can pull match informations easi
 } 
 ```
 # Requirements
-Python 3
+> Python 3
 ```
-pip install lxml #I dont know if this has to be installed.
+pip install lxml 
 pip install bs4
 pip install requests
 pip install tqdm
