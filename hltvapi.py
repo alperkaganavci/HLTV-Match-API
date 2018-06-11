@@ -1,4 +1,7 @@
-import requests, os, json, time
+import requests
+import os
+import json
+import time
 from datetime import datetime, timedelta
 from bs4 import BeautifulSoup
 from tqdm import tqdm
@@ -7,8 +10,6 @@ from tqdm import tqdm
 
 This program has been written by akagna
 GitHub @akagna
-Instagram @alperkavc
-Facebook @akagna
 -
 -
 -
@@ -100,7 +101,7 @@ def results():
     matchlinks_rs = []
     soup = get_source('https://hltv.org/results')
     now = datetime.now()
-    month = datetime.strftime(now, '%b')
+    month = datetime.strftime(now, '%B')
     today = datetime.strftime(now, '%d')
     yesterday = datetime.strftime(now + timedelta(-1), '%d')
     year = datetime.strftime(now, '%Y')
